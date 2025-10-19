@@ -1,0 +1,45 @@
+@startuml ROZvita Health - Auth Diagram
+
+' Configurare layout
+skinparam linetype ortho
+skinparam nodesep 80
+skinparam ranksep 100
+
+skinparam class {
+    BackgroundColor White
+    ArrowColor #2688d4
+    BorderColor #2688d4
+}
+
+package "Auth" {
+    class LoginScreen {
+        - emailController: TextEditingController
+        - passwordController: TextEditingController
+        - isLoading: bool
+        - error: String
+        - successMessage: String
+        + login(): Future<void>
+        + resetPassword(): Future<void>
+        + build(): Widget
+    }
+
+    class RegisterScreen {
+        - emailController: TextEditingController
+        - passwordController: TextEditingController
+        - error: String
+        + register(): Future<void>
+        + build(): Widget
+    }
+}
+
+' Relații cu Core (externe)
+LoginScreen .down.> "1" User : "<<creates>> \n{on auth}"
+RegisterScreen .down.> "1" User : "<<creates>> \n{on signup}"
+
+' Note explicative
+note left of LoginScreen : "Autentificare cu Firebase Auth"
+note right of RegisterScreen : "Înregistrare cu Firebase Auth"
+note bottom of LoginScreen : "Navigare la HomeMenuScreen după autentificare"
+note bottom of RegisterScreen : "Creare document User în Firestore"
+
+@enduml

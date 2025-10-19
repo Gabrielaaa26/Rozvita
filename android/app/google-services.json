@@ -1,0 +1,68 @@
+{
+  "project_info": {
+    "project_number": "637307250452",
+    "project_id": "bratarapuls",
+    "storage_bucket": "bratarapuls.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:637307250452:android:86dc6f2a02560b3251c401",
+        "android_client_info": {
+          "package_name": "com.example.bratara_puls"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "637307250452-l78s4c6ojc0elvjuhurbdljog3d2sdn7.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyD9NR2q2h5Ox5fckbuPraOLtZfCZZqmhZc"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "637307250452-l78s4c6ojc0elvjuhurbdljog3d2sdn7.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:637307250452:android:8b1fbbcef864198e51c401",
+        "android_client_info": {
+          "package_name": "com.example.bratara_puls_nou"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "637307250452-l78s4c6ojc0elvjuhurbdljog3d2sdn7.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyD9NR2q2h5Ox5fckbuPraOLtZfCZZqmhZc"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "637307250452-l78s4c6ojc0elvjuhurbdljog3d2sdn7.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

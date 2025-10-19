@@ -1,0 +1,82 @@
+@startuml ROZvita Health Use Case Diagram
+
+skinparam actorStyle awesome
+skinparam packageStyle rectangle
+skinparam usecaseStyle roundbox
+
+left to right direction
+
+actor "Utilizator" as user
+actor "Brățară BLE" as bracelet
+
+rectangle "ROZvita Health" {
+    package "Autentificare" {
+        usecase "Înregistrare cont" as UC1
+        usecase "Autentificare" as UC2
+        usecase "Resetare parolă" as UC3
+        usecase "Deconectare" as UC4
+    }
+    
+    package "Gestionare Profil" {
+        usecase "Vizualizare profil" as UC5
+        usecase "Editare profil" as UC6
+        usecase "Încărcare poză profil" as UC7
+    }
+    
+    package "Conexiune Brățară" {
+        usecase "Scanare dispozitive BLE" as UC8
+        usecase "Conectare la brățară" as UC9
+        usecase "Deconectare brățară" as UC10
+    }
+    
+    package "Monitorizare Puls" {
+        usecase "Vizualizare puls în timp real" as UC11
+        usecase "Salvare măsurători" as UC12
+        usecase "Vizualizare grafic timp real" as UC13
+    }
+    
+    package "Istoric" {
+        usecase "Vizualizare istoric măsurători" as UC14
+        usecase "Filtrare măsurători" as UC15
+        usecase "Ștergere istoric" as UC16
+        usecase "Vizualizare statistici" as UC17
+    }
+}
+
+' Relații pentru Autentificare
+user --> UC1
+user --> UC2
+user --> UC3
+user --> UC4
+
+' Relații pentru Profil
+user --> UC5
+user --> UC6
+user --> UC7
+
+' Relații pentru Conexiune Brățară
+user --> UC8
+user --> UC9
+user --> UC10
+bracelet --> UC9
+
+' Relații pentru Monitorizare
+user --> UC11
+bracelet --> UC11
+user --> UC12
+user --> UC13
+
+' Relații pentru Istoric
+user --> UC14
+user --> UC15
+user --> UC16
+user --> UC17
+
+' Dependențe și incluziuni
+UC2 ..> UC5 : <<include>>
+UC9 ..> UC11 : <<include>>
+UC11 ..> UC12 : <<include>>
+UC11 ..> UC13 : <<include>>
+UC14 ..> UC17 : <<include>>
+
+@enduml

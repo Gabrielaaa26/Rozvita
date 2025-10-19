@@ -1,0 +1,28 @@
+{
+  "flutter": {
+    "platforms": {
+      "android": {
+        "default": {
+          "projectId": "bratarapuls",
+          "appId": "1:637307250452:android:8b1fbbcef864198e51c401",
+          "fileOutput": "android/app/google-services.json"
+        }
+      },
+      "dart": {
+        "lib/firebase_options.dart": {
+          "projectId": "bratarapuls",
+          "configurations": {
+            "android": "1:637307250452:android:8b1fbbcef864198e51c401",
+            "ios": "1:637307250452:ios:b5108612e75551ed51c401",
+            "macos": "1:637307250452:ios:b5108612e75551ed51c401",
+            "web": "1:637307250452:web:29288f94e67f886751c401",
+            "windows": "1:637307250452:web:c0d86baaca21b2f651c401"
+          }
+        }
+      }
+    }
+  },
+  "storage": {
+    "rules": "storage.rules"
+  }
+}

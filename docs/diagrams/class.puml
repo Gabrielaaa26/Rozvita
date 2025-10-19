@@ -1,0 +1,180 @@
+@startuml ROZvita Health Class Diagram
+
+skinparam class {
+    BackgroundColor White
+    ArrowColor #2688d4
+    BorderColor #2688d4
+}
+
+package "Auth" {
+    class LoginScreen {
+        - emailController: TextEditingController
+        - passwordController: TextEditingController
+        - isLoading: bool
+        - error: String
+        - successMessage: String
+        + login(): Future<void>
+        + resetPassword(): Future<void>
+        + build(): Widget
+    }
+
+    class RegisterScreen {
+        - emailController: TextEditingController
+        - passwordController: TextEditingController
+        - error: String
+        + register(): Future<void>
+        + build(): Widget
+    }
+}
+
+package "Core" {
+    class BleConnectionManager {
+        - {static} _instance: BleConnectionManager
+        + connectedDevice: BluetoothDevice?
+        + heartRateChar: BluetoothCharacteristic?
+        + {static} getInstance(): BleConnectionManager
+        + clear(): void
+    }
+
+    class User {
+        + uid: String
+        + email: String
+        + name: String?
+        + profileImageUrl: String?
+        + createdAt: DateTime
+        + toMap(): Map<String, dynamic>
+        + {static} fromMap(map: Map<String, dynamic>): User
+        + getMeasurements(): Future<List<PulseMeasurement>>
+    }
+
+    class PulseMeasurement {
+        + id: String
+        + uid: String
+        + bpm: int
+        + timestamp: DateTime
+        + deviceId: String?
+        + toMap(): Map<String, dynamic>
+        + {static} fromMap(map: Map<String, dynamic>): PulseMeasurement
+        + getUser(): Future<User>
+    }
+}
+
+package "Screens" {
+    class HomeMenuScreen {
+        - _getUserData(): Future<Map<String, dynamic>?>
+        - _logout(): Future<void>
+        - _goToScanScreen(): void
+        - _goToPulseScreen(): void
+        - _goToHistoryScreen(): void
+        - _goToProfileScreen(): void
+        + build(): Widget
+    }
+
+    class ScanScreen {
+        - discoveredDevices: List<BluetoothDevice>
+        - isScanning: bool
+        - status: String
+        - _initBluetooth(): Future<void>
+        + startScan(): void
+        + connectToDevice(): Future<void>
+        + disconnectAndWait(): Future<void>
+        + build(): Widget
+    }
+
+    class PulseScreen {
+        - bpm: int?
+        - bpmHistory: List<int>
+        - status: String
+        - animationController: AnimationController
+        - scaleAnimation: Animation<double>
+        - _loadBpmHistoryFromFirebase(): Future<void>
+        - _listenToHeartRate(): void
+        + buildChartCard(): Widget
+        + buildPulseStatus(): Widget
+        + build(): Widget
+    }
+
+    class HistoryScreen {
+        - _pulseData: List<Map<String, dynamic>>
+        - _isLoading: bool
+        - _errorMessage: String
+        - _getMinY(): double
+        - _loadPulseData(): Future<void>
+        - _deleteHistory(): Future<void>
+        - _getSpots(): List<FlSpot>
+        + build(): Widget
+    }
+
+    class ProfileScreen {
+        - _userData: Map<String, dynamic>?
+        - _isEditing: bool
+        - _nameController: TextEditingController
+        - _uploadImage(): Future<void>
+        - _updateProfile(): Future<void>
+        - _loadUserData(): Future<void>
+        + build(): Widget
+    }
+}
+
+package "Widgets" {
+    class MenuCard {
+        + icon: IconData
+        + title: String
+        + color: Color
+        + onTap: VoidCallback
+        + build(): Widget
+    }
+
+    class PulseChart {
+        + data: List<FlSpot>
+        + minY: double
+        + maxY: double
+        - _buildChart(): LineChart
+        + build(): Widget
+    }
+
+    class ProfileImage {
+        + imageUrl: String?
+        + size: double
+        + onTap: VoidCallback?
+        + build(): Widget
+    }
+}
+
+' Relații cu Cardinalitate
+
+' Relații Core - Modelul de Date Principal
+User "1" -- "N" PulseMeasurement : "deține > \n{ordered by timestamp}"
+BleConnectionManager "1" -- "0..1" BluetoothDevice : "conectat la > \n{singleton}"
+
+' Relații Manager-Screen - Utilizare BLE
+BleConnectionManager "1" --o "1" HomeMenuScreen : "manager >"
+BleConnectionManager "1" --o "1" ScanScreen : "control BLE >"
+BleConnectionManager "1" --o "1" PulseScreen : "citire puls >"
+
+' Relații UI Components - Structură Interfață
+HomeMenuScreen "1" *-- "4" MenuCard : "conține exact > \n{fixed}"
+PulseScreen "1" *-- "1" PulseChart : "grafic timp real >"
+ProfileScreen "1" *-- "1" ProfileImage : "imagine profil >"
+HistoryScreen "1" *-- "1" PulseChart : "grafic istoric >"
+
+' Relații de Creare - Factory
+LoginScreen ..> User : "<<creates>> \n{on auth}"
+RegisterScreen ..> User : "<<creates>> \n{on signup}"
+PulseScreen ..> PulseMeasurement : "<<creates>> \n{on measure}"
+
+' Relații de Navigare - Flow Aplicație
+HomeMenuScreen "1" --> "1" ScanScreen : "<<navigates>> \n{push}"
+HomeMenuScreen "1" --> "1" PulseScreen : "<<navigates>> \n{push}"
+HomeMenuScreen "1" --> "1" HistoryScreen : "<<navigates>> \n{push}"
+HomeMenuScreen "1" --> "1" ProfileScreen : "<<navigates>> \n{push}"
+
+' Relații Firestore - Persistență
+User "1" ..> "1" ProfileScreen : "<<displays>> \n{sync}"
+PulseMeasurement "N" ..> "1" HistoryScreen : "<<displays>> \n{filtered}"
+
+' Relații de Autentificare - Securitate
+User "1" -- "1" LoginScreen : "autentifică > \n{Firebase Auth}"
+User "1" -- "1" RegisterScreen : "înregistrează > \n{Firebase Auth}"
+
+@enduml

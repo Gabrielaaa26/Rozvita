@@ -1,0 +1,89 @@
+@startuml ROZvita Health - Screens Diagram
+
+' Configurare layout
+skinparam linetype ortho
+skinparam nodesep 80
+skinparam ranksep 100
+
+skinparam class {
+    BackgroundColor White
+    ArrowColor #2688d4
+    BorderColor #2688d4
+}
+
+package "Screens" {
+    class HomeMenuScreen {
+        - _getUserData(): Future<Map<String, dynamic>?>
+        - _logout(): Future<void>
+        - _goToScanScreen(): void
+        - _goToPulseScreen(): void
+        - _goToHistoryScreen(): void
+        - _goToProfileScreen(): void
+        + build(): Widget
+    }
+
+    class ScanScreen {
+        - discoveredDevices: List<BluetoothDevice>
+        - isScanning: bool
+        - status: String
+        - _initBluetooth(): Future<void>
+        + startScan(): void
+        + connectToDevice(): Future<void>
+        + disconnectAndWait(): Future<void>
+        + build(): Widget
+    }
+
+    class PulseScreen {
+        - bpm: int?
+        - bpmHistory: List<int>
+        - status: String
+        - animationController: AnimationController
+        - scaleAnimation: Animation<double>
+        - _loadBpmHistoryFromFirebase(): Future<void>
+        - _listenToHeartRate(): void
+        + buildChartCard(): Widget
+        + buildPulseStatus(): Widget
+        + build(): Widget
+    }
+
+    class HistoryScreen {
+        - _pulseData: List<Map<String, dynamic>>
+        - _isLoading: bool
+        - _errorMessage: String
+        - _getMinY(): double
+        - _loadPulseData(): Future<void>
+        - _deleteHistory(): Future<void>
+        - _getSpots(): List<FlSpot>
+        + build(): Widget
+    }
+
+    class ProfileScreen {
+        - _userData: Map<String, dynamic>?
+        - _isEditing: bool
+        - _nameController: TextEditingController
+        - _uploadImage(): Future<void>
+        - _updateProfile(): Future<void>
+        - _loadUserData(): Future<void>
+        + build(): Widget
+    }
+}
+
+' Relații de Navigare
+HomeMenuScreen "1" -down-> "1" ScanScreen : "<<navigates>>"
+HomeMenuScreen "1" -down-> "1" PulseScreen : "<<navigates>>"
+HomeMenuScreen "1" -down-> "1" HistoryScreen : "<<navigates>>"
+HomeMenuScreen "1" -down-> "1" ProfileScreen : "<<navigates>>"
+
+' Relații cu Widgets (externe)
+note right of HomeMenuScreen : "Folosește MenuCard"
+note right of PulseScreen : "Folosește PulseChart"
+note right of ProfileScreen : "Folosește ProfileImage"
+note right of HistoryScreen : "Folosește PulseChart"
+
+' Relații cu Core (externe)
+note left of PulseScreen : "Creează PulseMeasurement"
+note left of ProfileScreen : "Afișează User"
+note left of HistoryScreen : "Afișează PulseMeasurement"
+note left of ScanScreen : "Folosește BleConnectionManager"
+
+@enduml

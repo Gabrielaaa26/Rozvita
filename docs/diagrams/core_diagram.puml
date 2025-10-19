@@ -1,0 +1,55 @@
+@startuml ROZvita Health - Core Diagram
+
+' Configurare layout
+skinparam linetype ortho
+skinparam nodesep 80
+skinparam ranksep 100
+
+skinparam class {
+    BackgroundColor White
+    ArrowColor #2688d4
+    BorderColor #2688d4
+}
+
+package "Core" {
+    class User {
+        + uid: String
+        + email: String
+        + name: String?
+        + profileImageUrl: String?
+        + createdAt: DateTime
+        + toMap(): Map<String, dynamic>
+        + {static} fromMap(map: Map<String, dynamic>): User
+        + getMeasurements(): Future<List<PulseMeasurement>>
+    }
+
+    class PulseMeasurement {
+        + id: String
+        + uid: String
+        + bpm: int
+        + timestamp: DateTime
+        + deviceId: String?
+        + toMap(): Map<String, dynamic>
+        + {static} fromMap(map: Map<String, dynamic>): PulseMeasurement
+        + getUser(): Future<User>
+    }
+
+    class BleConnectionManager {
+        - {static} _instance: BleConnectionManager
+        + connectedDevice: BluetoothDevice?
+        + heartRateChar: BluetoothCharacteristic?
+        + {static} getInstance(): BleConnectionManager
+        + clear(): void
+    }
+}
+
+' Relații Core
+User "1" -right- "N" PulseMeasurement : "deține > \n{ordered by timestamp}"
+BleConnectionManager "1" -up- "0..1" BluetoothDevice : "conectat la > \n{singleton}"
+
+' Relații cu alte module (externe)
+note bottom of User : "Creat de LoginScreen/RegisterScreen\nAfișat în ProfileScreen"
+note bottom of PulseMeasurement : "Creat de PulseScreen\nAfișat în HistoryScreen"
+note bottom of BleConnectionManager : "Folosit de ScanScreen/PulseScreen"
+
+@enduml

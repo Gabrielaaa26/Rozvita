@@ -1,0 +1,49 @@
+@startuml ROZvita Health - Widgets Diagram
+
+' Configurare layout
+skinparam linetype ortho
+skinparam nodesep 80
+skinparam ranksep 100
+
+skinparam class {
+    BackgroundColor White
+    ArrowColor #2688d4
+    BorderColor #2688d4
+}
+
+package "Widgets" {
+    class MenuCard {
+        + icon: IconData
+        + title: String
+        + color: Color
+        + onTap: VoidCallback
+        + build(): Widget
+    }
+
+    class PulseChart {
+        + data: List<FlSpot>
+        + minY: double
+        + maxY: double
+        - _buildChart(): LineChart
+        + build(): Widget
+    }
+
+    class ProfileImage {
+        + imageUrl: String?
+        + size: double
+        + onTap: VoidCallback?
+        + build(): Widget
+    }
+}
+
+' Note despre utilizare
+note left of MenuCard : "Folosit în HomeMenuScreen\n4 instanțe pentru navigare"
+note right of PulseChart : "Folosit în:\n- PulseScreen (timp real)\n- HistoryScreen (istoric)"
+note bottom of ProfileImage : "Folosit în ProfileScreen\nIntegrare cu Firebase Storage"
+
+' Relații cu alte module (externe)
+note top of MenuCard : "Proprietar: HomeMenuScreen"
+note top of PulseChart : "Proprietari: PulseScreen, HistoryScreen"
+note top of ProfileImage : "Proprietar: ProfileScreen"
+
+@enduml
