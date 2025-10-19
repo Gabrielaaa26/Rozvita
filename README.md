@@ -38,8 +38,8 @@ O aplicație Flutter pentru monitorizarea pulsului prin conectivitate Bluetooth 
 
 1. Clonați repository-ul:
 ```bash
-git clone https://github.com/[username]/rozvita.git
-cd rozvita
+git clone https://github.com/Gabrielaaa26/Rozvita.git
+cd Rozvita
 ```
 
 2. Instalați dependințele:
